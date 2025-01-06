@@ -203,10 +203,10 @@ int main() {
 	}
 	if strings.TrimSpace(buffer.String()) != strings.TrimSpace(`
 <h1>Title</h1>
-<pre style="background-color:#fff;display:grid;"><code><span style="display:flex; background-color:#e5e5e5"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;iostream&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
-</span></span></span><span style="display:flex; background-color:#e5e5e5"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>() {
-</span></span><span style="display:flex;"><span>    std<span style="color:#000;font-weight:bold">::</span>cout<span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;hello&#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
-</span></span><span style="display:flex;"><span>}
+<pre style="background-color:#fff;display:grid;"><code><span style="display:flex; background-color:#e5e5e5"><span><span style="color:#57606a">#include</span> <span style="color:#57606a">&lt;iostream&gt;</span><span style="color:#57606a">
+</span></span></span><span style="display:flex; background-color:#e5e5e5"><span><span style="color:#57606a"></span><span style="color:#cf222e">int</span> <span style="color:#6639ba">main</span><span style="color:#1f2328">()</span> <span style="color:#1f2328">{</span>
+</span></span><span style="display:flex;"><span>    std<span style="color:#0550ae">::</span>cout<span style="color:#0550ae">&lt;&lt;</span> <span style="color:#0a3069">&#34;hello&#34;</span> <span style="color:#0550ae">&lt;&lt;</span> std<span style="color:#0550ae">::</span>endl<span style="color:#1f2328">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#1f2328">}</span>
 </span></span></code></pre>
 `) {
 		t.Errorf("failed to render HTML:\n%s", buffer.String())

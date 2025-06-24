@@ -32,8 +32,42 @@ func setRegisterPrice(cur realm, newPrice int64) {
 //----------------------------------------
 // Public API
 
+// ProposeArbitraryName allows GovDAO to propose a fully arbitrary name for an address
+func ProposeArbitraryName(name, reason string, addr std.Address) dao.ProposalRequest {
+	if name == "" {
+		panic("name cannot be empty")
+	}
+
+	if addr.String() == "" {
+		panic("address cannot be empty")
+	}
+
+	userData, _ := susers.ResolveAny(name)
+	if userData != nil {
+		panic("Name already taken")
+	}
+
+	userData = susers.ResolveAddress(addr)
+
+	var cb func() error
+	// If address has a name already, update the name
+	if userData != nil {
+		cb = func() error {
+			return updateUsername(cross, userData, name)
+		}
+	} else {
+		cb = func() error {
+			return susers.RegisterUser(cross, name, addr)
+		}
+	}
+
+	e := dao.NewSimpleExecutor(cb, "")
+
+	return dao.NewProposalRequest(ufmt.Sprintf("User Registry V1: Give %s to %s", name, addr.String()), reason, e)
+}
+
 // NewSetPausedExecutor allows GovDAO to pause or unpause this realm
-func NewSetPausedExecutor(newPausedValue bool) dao.ProposalRequest {
+func NewSetPausedExecutor(newPausedValue bool, reason string) dao.ProposalRequest {
 	cb := func(cur realm) error {
 		setPaused(cur, newPausedValue)
 		return nil
@@ -42,17 +76,17 @@ func NewSetPausedExecutor(newPausedValue bool) dao.ProposalRequest {
 	e := dao.NewSimpleExecutor(cb, "")
 
 	if newPausedValue {
-		return dao.NewProposalRequest("User Registry V1: Pause", "", e)
+		return dao.NewProposalRequest("User Registry V1: Pause", reason, e)
 	}
 
-	return dao.NewProposalRequest("User Registry V1: Unpause", "", e)
+	return dao.NewProposalRequest("User Registry V1: Unpause", reason, e)
 }
 
 // ProposeNewName allows GovDAO to propose a new name for an existing user
 // The associated address and all previous names of a user that changes a name
 // are preserved, and all resolve to the new name.
-// The new name is completely arbitrary.
-func ProposeNewName(addr address, newName string) dao.ProposalRequest {
+// The new name can be completely arbitrary.
+func ProposeNewName(addr address, newName, reason string) dao.ProposalRequest {
 	userData := susers.ResolveAddress(addr)
 	if userData == nil {
 		panic(susers.ErrUserNotExistOrDeleted)
@@ -65,11 +99,7 @@ func ProposeNewName(addr address, newName string) dao.ProposalRequest {
 
 	e := dao.NewSimpleExecutor(cb, "")
 
-	return dao.NewProposalRequest(
-		ufmt.Sprintf("User Registry V1: Rename user `%s` to `%s`", userData.Name(), newName),
-		"",
-		e,
-	)
+	return dao.NewProposalRequest(ufmt.Sprintf("User Registry V1: Rename user %s to %s", userData.Name(), newName), reason, e)
 }
 
 // ProposeDeleteUser allows GovDAO to propose deletion of a user
@@ -87,15 +117,11 @@ func ProposeDeleteUser(addr address, reason string) dao.ProposalRequest {
 
 	e := dao.NewSimpleExecutor(cb, "")
 
-	return dao.NewProposalRequest(
-		ufmt.Sprintf("User Registry V1: Delete user `%s`", userData.Name()),
-		reason,
-		e,
-	)
+	return dao.NewProposalRequest(ufmt.Sprintf("User Registry V1: Delete user %s", userData.Name()), reason, e)
 }
 
 // ProposeNewRegisterPrice allows GovDAO to update the price of registration
-func ProposeNewRegisterPrice(newPrice int64) dao.ProposalRequest {
+func ProposeNewRegisterPrice(newPrice int64, reason string) dao.ProposalRequest {
 	if newPrice < 0 {
 		panic("invalid price")
 	}
@@ -108,8 +134,8 @@ func ProposeNewRegisterPrice(newPrice int64) dao.ProposalRequest {
 	e := dao.NewSimpleExecutor(cb, "")
 
 	return dao.NewProposalRequest(
-		ufmt.Sprintf("User Registry V1: Update registration price to `%d`", newPrice),
-		"",
+		ufmt.Sprintf("User Registry V1: Change registration price to `%dugnot`", newPrice),
+		reason,
 		e,
 	)
 }

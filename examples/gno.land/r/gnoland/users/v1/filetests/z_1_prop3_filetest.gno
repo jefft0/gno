@@ -3,10 +3,10 @@ package main
 // SEND: 1000000ugnot
 
 import (
-	"std"
+	"chain/runtime"
 	"testing"
 
-	"gno.land/p/demo/testutils"
+	"gno.land/p/nt/testutils/v0"
 	users "gno.land/r/gnoland/users/v1"
 	"gno.land/r/gov/dao"
 	daov3init "gno.land/r/gov/dao/v3/init"
@@ -15,7 +15,7 @@ import (
 
 // Test giving an arbi name via GovDAO
 
-var c std.Address = std.OriginCaller()
+var c address = runtime.OriginCaller()
 
 func init() {
 	daov3init.InitWithUsers(c)
@@ -24,12 +24,12 @@ func init() {
 
 	// Register alice
 	testing.SetOriginCaller(alice)
-	testing.SetRealm(std.NewUserRealm(alice))
+	testing.SetRealm(testing.NewUserRealm(alice))
 	users.Register(cross, "alice123")
 
 	// Prop to delete user
 	testing.SetOriginCaller(c)
-	testing.SetRealm(std.NewUserRealm(c))
+	testing.SetRealm(testing.NewUserRealm(c))
 	pr := users.ProposeArbitraryName("alice", "we like alice so we want to give her an arbitrary name", alice)
 	dao.MustCreateProposal(cross, pr)
 }
@@ -65,79 +65,93 @@ func main() {
 
 // Output:
 // --
-// # Active Proposals:
-// ## Proposal with id: 0
-// ### Title: User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
+// # GovDAO
+// ## Members
+// [> Go to Memberstore <](/r/gov/dao/v3/memberstore)
+// ## Proposals
+// ### [Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`](/r/gov/dao:0)
+// Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
-// ### Proposed by: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
+// Status: ACTIVE
+//
+// Tiers eligible to vote: T1, T2, T3
+//
+// ---
+//
+//
+// --
+// ## Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
+// Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
 // we like alice so we want to give her an arbitrary name
 //
 //
-// ### Proposal Status:
 //
-// - **Proposal open for votes**
-// - Allowed tiers to vote: T1 T2 T3
+// ---
+//
+// ### Stats
+// - **Proposal is open for votes**
+// - Tiers eligible to vote: T1, T2, T3
 // - YES PERCENT: 0%
 // - NO PERCENT: 0%
-// - [Go to votes list](/r/gov/dao:0/votes).
 //
+// [Detailed voting list](/r/gov/dao:0/votes)
 //
+// ---
+//
+// ### Actions
+// [Vote YES](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=YES&pid=0) | [Vote NO](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=NO&pid=0) | [Vote ABSTAIN](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=ABSTAIN&pid=0)
+//
+// WARNING: Please double check transaction data before voting.
 // --
-// ## Proposal with id: 0
-// ### Title: User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
-//
-// ### Proposed by: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
+// --
+// ## Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
+// Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
 // we like alice so we want to give her an arbitrary name
 //
 //
-// ### Proposal Status:
 //
-// - **Proposal open for votes**
-// - Allowed tiers to vote: T1 T2 T3
-// - YES PERCENT: 0%
-// - NO PERCENT: 0%
-// - [Go to votes list](/r/gov/dao:0/votes).
+// ---
 //
-//
-// --
-// --
-// ## Proposal with id: 0
-// ### Title: User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
-//
-// ### Proposed by: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
-//
-// we like alice so we want to give her an arbitrary name
-//
-//
-// ### Proposal Status:
-//
-// - **Proposal open for votes**
-// - Allowed tiers to vote: T1 T2 T3
+// ### Stats
+// - **Proposal is open for votes**
+// - Tiers eligible to vote: T1, T2, T3
 // - YES PERCENT: 100%
 // - NO PERCENT: 0%
-// - [Go to votes list](/r/gov/dao:0/votes).
 //
+// [Detailed voting list](/r/gov/dao:0/votes)
 //
+// ---
+//
+// ### Actions
+// [Vote YES](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=YES&pid=0) | [Vote NO](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=NO&pid=0) | [Vote ABSTAIN](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=ABSTAIN&pid=0)
+//
+// WARNING: Please double check transaction data before voting.
 // --
 // --
-// ## Proposal with id: 0
-// ### Title: User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
-//
-// ### Proposed by: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
+// ## Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
+// Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
 // we like alice so we want to give her an arbitrary name
 //
 //
-// ### Proposal Status:
 //
+// ---
+//
+// ### Stats
 // - **PROPOSAL HAS BEEN ACCEPTED**
-// - Allowed tiers to vote: T1 T2 T3
+// - Tiers eligible to vote: T1, T2, T3
 // - YES PERCENT: 100%
 // - NO PERCENT: 0%
-// - [Go to votes list](/r/gov/dao:0/votes).
 //
+// [Detailed voting list](/r/gov/dao:0/votes)
 //
+// ---
+//
+// ### Actions
+// [Vote YES](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=YES&pid=0) | [Vote NO](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=NO&pid=0) | [Vote ABSTAIN](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=ABSTAIN&pid=0)
+//
+// WARNING: Please double check transaction data before voting.
 // --
 // g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh

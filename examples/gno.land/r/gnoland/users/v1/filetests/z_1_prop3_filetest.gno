@@ -13,7 +13,8 @@ import (
 	susers "gno.land/r/sys/users"
 )
 
-// Test deleting a name via GovDAO
+// Test giving an arbi name via GovDAO
+
 var c address = runtime.OriginCaller()
 
 func init() {
@@ -29,7 +30,7 @@ func init() {
 	// Prop to delete user
 	testing.SetOriginCaller(c)
 	testing.SetRealm(testing.NewUserRealm(c))
-	pr := users.ProposeDeleteUser(alice, "delete user test")
+	pr := users.ProposeArbitraryName("alice", "we like alice so we want to give her an arbitrary name", alice)
 	dao.MustCreateProposal(cross, pr)
 }
 
@@ -56,10 +57,10 @@ func main() {
 	println("--")
 	println(dao.Render("0"))
 
-	data, _ := susers.ResolveName("alice123")
-	if data == nil {
-		println("Successfully deleted alice")
-	}
+	println("--")
+
+	data, _ := susers.ResolveName("alice")
+	println(data.Addr())
 }
 
 // Output:
@@ -68,7 +69,7 @@ func main() {
 // ## Members
 // [> Go to Memberstore <](/r/gov/dao/v3/memberstore)
 // ## Proposals
-// ### [Prop #0 - User Registry V1: Delete user `alice123`](/r/gov/dao:0)
+// ### [Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`](/r/gov/dao:0)
 // Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
 // Status: ACTIVE
@@ -79,10 +80,10 @@ func main() {
 //
 //
 // --
-// ## Prop #0 - User Registry V1: Delete user `alice123`
+// ## Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
 // Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
-// delete user test
+// we like alice so we want to give her an arbitrary name
 //
 //
 //
@@ -104,10 +105,10 @@ func main() {
 // WARNING: Please double check transaction data before voting.
 // --
 // --
-// ## Prop #0 - User Registry V1: Delete user `alice123`
+// ## Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
 // Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
-// delete user test
+// we like alice so we want to give her an arbitrary name
 //
 //
 //
@@ -129,10 +130,10 @@ func main() {
 // WARNING: Please double check transaction data before voting.
 // --
 // --
-// ## Prop #0 - User Registry V1: Delete user `alice123`
+// ## Prop #0 - User Registry V1: Give `alice` to `g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh`
 // Author: g1wymu47drhr0kuq2098m792lytgtj2nyx77yrsm
 //
-// delete user test
+// we like alice so we want to give her an arbitrary name
 //
 //
 //
@@ -152,4 +153,5 @@ func main() {
 // [Vote YES](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=YES&pid=0) | [Vote NO](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=NO&pid=0) | [Vote ABSTAIN](/r/gov/dao$help&func=MustVoteOnProposalSimple&option=ABSTAIN&pid=0)
 //
 // WARNING: Please double check transaction data before voting.
-// Successfully deleted alice
+// --
+// g1v9kxjcm9ta047h6lta047h6lta047h6lzd40gh

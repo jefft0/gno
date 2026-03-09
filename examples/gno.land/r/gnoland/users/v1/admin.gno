@@ -117,7 +117,11 @@ func ProposeDeleteUser(addr address, reason string) dao.ProposalRequest {
 
 	e := dao.NewSimpleExecutor(cb, "")
 
-	return dao.NewProposalRequest(ufmt.Sprintf("User Registry V1: Delete user `%s`", userData.Name()), reason, e)
+	return dao.NewProposalRequest(
+		ufmt.Sprintf("User Registry V1: Delete user `%s`", userData.Name()),
+		reason,
+		e,
+	)
 }
 
 // ProposeNewRegisterPrice allows GovDAO to update the price of registration

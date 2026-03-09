@@ -13,7 +13,7 @@ import (
 	susers "gno.land/r/sys/users"
 )
 
-// Test updating a name via GovDAO
+// Test deleting a name via GovDAO
 var c address = runtime.OriginCaller()
 
 func init() {

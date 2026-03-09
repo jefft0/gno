@@ -33,7 +33,7 @@ func setRegisterPrice(cur realm, newPrice int64) {
 // Public API
 
 // ProposeArbitraryName allows GovDAO to propose a fully arbitrary name for an address
-func ProposeArbitraryName(name, reason string, addr std.Address) dao.ProposalRequest {
+func ProposeArbitraryName(name, reason string, addr address) dao.ProposalRequest {
 	if name == "" {
 		panic("name cannot be empty")
 	}
@@ -49,14 +49,14 @@ func ProposeArbitraryName(name, reason string, addr std.Address) dao.ProposalReq
 
 	userData = susers.ResolveAddress(addr)
 
-	var cb func() error
+	var cb func(realm) error
 	// If address has a name already, update the name
 	if userData != nil {
-		cb = func() error {
-			return updateUsername(cross, userData, name)
+		cb = func(cur realm) error {
+			return updateUsername(cur, userData, name)
 		}
 	} else {
-		cb = func() error {
+		cb = func(cur realm) error {
 			return susers.RegisterUser(cross, name, addr)
 		}
 	}

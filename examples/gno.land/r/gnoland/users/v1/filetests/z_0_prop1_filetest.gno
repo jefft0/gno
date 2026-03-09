@@ -29,7 +29,7 @@ func init() {
 	// Prop to change name
 	testing.SetOriginCaller(c)
 	testing.SetRealm(testing.NewUserRealm(c))
-	pr := users.ProposeNewName(alice, "alice_new123")
+	pr := users.ProposeNewName(alice, "alice_new123", "")
 	dao.MustCreateProposal(cross, pr)
 }
 

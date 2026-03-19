@@ -51,14 +51,8 @@ func (u UserData) RenderLink(linkText string) string {
 	return ufmt.Sprintf("[%s](/u/%s)", linkText, u.username)
 }
 
-// RegisterUser adds a new user to the system.
-func RegisterUser(cur realm, name string, address_XXX address) error {
-	// At genesis (height 0), allow any caller to register users.
-	// After genesis, only whitelisted controllers can register.
-	if runtime.ChainHeight() > 0 && !controllers.Has(runtime.PreviousRealm().Address()) {
-		return NewErrNotWhitelisted()
-	}
-
+// registerUser adds a new user to the system without checking controllers
+func registerUser(cur realm, name string, address_XXX address) error {
 	// Validate name
 	if err := validateName(name); err != nil {
 		return err
@@ -101,6 +95,17 @@ func RegisterUser(cur realm, name string, address_XXX address) error {
 		"address", address_XXX.String(),
 	)
 	return nil
+}
+
+// RegisterUser adds a new user to the system.
+func RegisterUser(cur realm, name string, address_XXX address) error {
+	// At genesis (height 0), allow any caller to register users.
+	// After genesis, only whitelisted controllers can register.
+	if runtime.ChainHeight() > 0 && !controllers.Has(runtime.PreviousRealm().Address()) {
+		return NewErrNotWhitelisted()
+	}
+
+	return registerUser(name, address_XXX)
 }
 
 // UpdateName adds a name that is associated with a specific address

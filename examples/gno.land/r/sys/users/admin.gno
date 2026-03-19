@@ -87,6 +87,20 @@ func ProposeControllerAdditionAndRemoval(toAdd, toRemove address) dao.ProposalRe
 	return dao.NewProposalRequest("Add and Remove Whitelisted Callers From \"sys/users\" Realm", desc, dao.NewSimpleExecutor(cb, ""))
 }
 
+// ProposeRegisterUser allows GovDAO to register an arbitrary name
+func ProposeRegisterUser(name string, addr address) dao.ProposalRequest {
+	if !addr.IsValid() {
+		panic(ErrInvalidAddress)
+	}
+
+	cb := func(cur realm) error {
+		return registerUser(name, addr)
+	}
+
+	desc := "This proposal registers " + name + " with address " + addr.String() + " in `sys/users`."
+	return dao.NewProposalRequest("Register user to \"sys/users\" Realm", desc, dao.NewSimpleExecutor(cb, ""))
+}
+
 // Helpers
 
 func deleteFromWhitelist(addr address) error {

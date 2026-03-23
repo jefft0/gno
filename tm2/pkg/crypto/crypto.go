@@ -51,7 +51,6 @@ func AddressFromPreimage(bz []byte) Address {
 // AddressFromBytes returns an Address from the bytes in bz.
 // It returns an error if bz has an unexpected address byte length.
 func AddressFromBytes(bz []byte) (ret Address, err error) {
-	err = nil
 	if len(bz) != AddressSize {
 		err = fmt.Errorf("unexpected address byte length. expected %v, got %v", AddressSize, len(bz))
 		return

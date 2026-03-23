@@ -34,7 +34,7 @@ func NewCoin(denom string, amount int64) Coin {
 	return coin
 }
 
-// NewCoin returns a new coin with a denomination and amount.
+// NewCoinSafe returns a new coin with a denomination and amount.
 // It will return an error if the amount is negative.
 // To construct a negative (invalid) amount, use an operation.
 func NewCoinSafe(denom string, amount int64) (Coin, error) {

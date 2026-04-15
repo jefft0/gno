@@ -542,7 +542,8 @@ func (opts *TestOptions) runTestFiles(
 	examples := loadExampleTestFuncs(files)
 	filter := splitRegexp(opts.RunFlag)
 	for _, fd := range examples {
-		if !shouldRun(filter, fd.Name) {
+		fname := string(fd.Name)
+		if !shouldRun(filter, fname) {
 			continue
 		}
 		if !fd.Attributes.HasAttribute(gno.ATTR_EXAMPLE_OUTPUT) {
@@ -576,7 +577,6 @@ func (opts *TestOptions) runTestFiles(
 			m.Debugger.Enable(os.Stdin, os.Stdout, fileContent)
 		}
 
-		fname := string(fd.Name)
 		startedAt := time.Now()
 		m.Eval(gno.Call(gno.Nx(fname)))
 		timeSpent := time.Since(startedAt)

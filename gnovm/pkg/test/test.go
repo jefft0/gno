@@ -540,7 +540,11 @@ func (opts *TestOptions) runTestFiles(
 	}
 
 	examples := loadExampleTestFuncs(files)
+	filter := splitRegexp(opts.RunFlag)
 	for _, fd := range examples {
+		if !shouldRun(filter, fd.Name) {
+			continue
+		}
 		if !fd.Attributes.HasAttribute(gno.ATTR_EXAMPLE_OUTPUT) {
 			// Don't run examples with no output.
 			continue

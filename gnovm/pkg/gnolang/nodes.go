@@ -143,7 +143,7 @@ const (
 	ATTR_FIX_FROM              GnoAttribute = "ATTR_FIX_FROM"         // gno fix this version.
 	ATTR_LOOPVAR_SKIP          GnoAttribute = "ATTR_LOOPVAR_SKIP"     // temp only
 	ATTR_EXAMPLE_OUTPUT        GnoAttribute = "ATTR_EXAMPLE_OUTPUT"   // the expected output for an Example test function.
-	ATTR_OUTPUT_UNORDERED      GnoAttribute = "ATTR_OUTPUT_UNORDERED" // the expected output for an Example test function is unordered.
+	ATTR_OUTPUT_UNORDERED      GnoAttribute = "ATTR_OUTPUT_UNORDERED" // whether the expected output for an Example test function is unordered.
 	// For top level declarations, a map[Name]struct{} of other dependencies
 	ATTR_DECL_DEPS GnoAttribute = "ATTR_DECL_DEPS"
 )

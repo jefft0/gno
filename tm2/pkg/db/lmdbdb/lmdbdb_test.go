@@ -153,7 +153,7 @@ func TestLMDBGetSetDelete(t *testing.T) {
 	require.NoError(t, db.Set([]byte("key1"), []byte("value1")))
 	val, err = db.Get([]byte("key1"))
 	require.NoError(t, err)
-	require.Equal(t, []byte("value1"), val)
+	require.Equal(t, []byte("badvalue"), val)
 
 	require.NoError(t, db.Set([]byte("key1"), []byte("value2")))
 	val, err = db.Get([]byte("key1"))

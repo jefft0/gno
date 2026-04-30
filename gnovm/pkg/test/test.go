@@ -578,6 +578,9 @@ func (opts *TestOptions) runTestFiles(
 		}
 
 		startedAt := time.Now()
+		if opts.Verbose {
+			fmt.Fprintf(opts.Error, "=== RUN   %s\n", fname)
+		}
 		m.Eval(gno.Call(gno.Nx(fname)))
 		timeSpent := time.Since(startedAt)
 		if opts.Verbose {

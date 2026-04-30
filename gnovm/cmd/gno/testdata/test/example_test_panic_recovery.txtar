@@ -1,0 +1,38 @@
+# Test that a panicking example doesn't prevent subsequent examples from running.
+# Currently FAILS: the second example is never executed because the panic
+# from the first example propagates to the top-level recover in runTestFiles,
+# aborting all remaining examples.
+
+! gno test -v .
+
+# The first example should be reported as a panic failure.
+stderr 'panic: first example panics'
+
+# The second example should still run and pass.
+# This assertion will FAIL with the current implementation.
+stderr '--- PASS: ExampleSecond .+'
+
+-- two_examples.gno --
+package twopanic
+
+-- two_examples_test.gno --
+package twopanic
+
+import "fmt"
+
+func ExampleFirst() {
+	panic("first example panics")
+	// Output:
+	// never reached
+}
+
+func ExampleSecond() {
+	fmt.Println("hello")
+	// Output:
+	// hello
+}
+
+-- gnomod.toml --
+module = "gno.test/p/integ/two_panic_example_tst"
+gno = "0.9"
+

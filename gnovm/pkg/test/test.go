@@ -388,6 +388,10 @@ func (opts *TestOptions) runTestFiles(
 	}
 	pv := m.Package
 
+	testingpv := m.Store.GetPackage("testing", false)
+	testingtv := gno.TypedValue{T: &gno.PackageType{}, V: testingpv}
+	testingcx := &gno.ConstExpr{TypedValue: testingtv}
+
 	// Load the test files into package and save.
 	// m.RunFiles(files.Files...)
 
@@ -404,9 +408,6 @@ func (opts *TestOptions) runTestFiles(
 		m.Alloc = alloc.Reset()
 		m.SetActivePackage(pv)
 
-		testingpv := m.Store.GetPackage("testing", false)
-		testingtv := gno.TypedValue{T: &gno.PackageType{}, V: testingpv}
-		testingcx := &gno.ConstExpr{TypedValue: testingtv}
 		testfv := m.Eval(gno.Nx(tf.Name))[0].GetFunc()
 
 		var runTestX gno.Expr
@@ -560,6 +561,10 @@ func (opts *TestOptions) runTestFiles(
 		m.Alloc = alloc.Reset()
 		m.SetActivePackage(pv)
 
+		runExampleTestX := gno.Sel(testingcx, "RunExampleTest")
+		runExampleTest := m.Eval(runExampleTestX)[0]
+		runExampleTestCX := gno.NewConstExpr(runExampleTestX, runExampleTest)
+
 		if opts.Debug {
 			fileContent := func(ppath, name string) string {
 				p := filepath.Join(opts.RootDir, ppath, name)
@@ -581,17 +586,29 @@ func (opts *TestOptions) runTestFiles(
 		if opts.Verbose {
 			fmt.Fprintf(opts.Error, "=== RUN   %s\n", fname)
 		}
-		m.Eval(gno.Call(gno.Nx(fname)))
+		eval := m.Eval(gno.Call(
+			runExampleTestCX, // Call testing.RunExampleTest
+			gno.Nx(fname),
+		))
 		timeSpent := time.Since(startedAt)
-		if opts.Verbose {
-			fmt.Fprintf(opts.Error, "--- GAS:  %d\n", m.GasMeter.GasConsumed())
+		ok := true
+		panicked := eval[0].GetBool()
+		if panicked {
+			ok = false
+			// Already printed the panic message and stacktrace
+			dstr := fmtDuration(timeSpent)
+			fmt.Fprintf(opts.Error, "--- FAIL: %s (%s)\n", fname, dstr)
+		} else {
+			if opts.Verbose {
+				fmt.Fprintf(opts.Error, "--- GAS:  %d\n", m.GasMeter.GasConsumed())
+			}
+
+			stdout := opts.filetestBuffer.String()
+			expected := fd.Attributes.GetAttribute(gno.ATTR_EXAMPLE_OUTPUT).(string)
+			unordered := fd.Attributes.HasAttribute(gno.ATTR_OUTPUT_UNORDERED) && fd.Attributes.GetAttribute(gno.ATTR_OUTPUT_UNORDERED).(bool)
+
+			ok = opts.processExampleResult(fname, stdout, expected, timeSpent, unordered, true, nil)
 		}
-
-		stdout := opts.filetestBuffer.String()
-		expected := fd.Attributes.GetAttribute(gno.ATTR_EXAMPLE_OUTPUT).(string)
-		unordered := fd.Attributes.HasAttribute(gno.ATTR_OUTPUT_UNORDERED) && fd.Attributes.GetAttribute(gno.ATTR_OUTPUT_UNORDERED).(bool)
-
-		ok := opts.processExampleResult(fname, stdout, expected, timeSpent, unordered, true, nil)
 		if !ok {
 			err := fmt.Errorf("failed: %q", fname)
 			errs = multierr.Append(errs, err)

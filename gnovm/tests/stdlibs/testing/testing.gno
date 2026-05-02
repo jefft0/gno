@@ -357,9 +357,7 @@ func runTest_cur(runFlag string, verbose bool, failfast bool, test InternalTest)
 func RunExampleTest(exampleTestFunc func()) (panicked bool) {
 	defer func() {
 		err, st := recoverWithStacktrace()
-		switch err.(type) {
-		case nil:
-		default:
+		if err != nil {
 			panicked = true
 			fmt.Fprintf(os.Stderr, "panic: %v\nStacktrace:\n%s\n", err, st)
 		}

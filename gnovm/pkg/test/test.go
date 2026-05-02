@@ -542,6 +542,7 @@ func (opts *TestOptions) runTestFiles(
 
 	examples := loadExampleTestFuncs(files)
 	filter := splitRegexp(opts.RunFlag)
+	runExampleTestX := gno.Sel(testingcx, "RunExampleTest")
 	for _, fd := range examples {
 		fname := string(fd.Name)
 		if !shouldRun(filter, fname) {
@@ -561,7 +562,6 @@ func (opts *TestOptions) runTestFiles(
 		m.Alloc = alloc.Reset()
 		m.SetActivePackage(pv)
 
-		runExampleTestX := gno.Sel(testingcx, "RunExampleTest")
 		runExampleTest := m.Eval(runExampleTestX)[0]
 		runExampleTestCX := gno.NewConstExpr(runExampleTestX, runExampleTest)
 

@@ -6,7 +6,7 @@ toolchain go1.24.4
 
 require (
 	connectrpc.com/connect v1.16.2
-	github.com/gnolang/gnonative/v4 v4.8.1-0.20260427154807-ee4fa0cdb1e3
+	github.com/gnolang/gnonative/v4 v4.9.1
 )
 
 require (

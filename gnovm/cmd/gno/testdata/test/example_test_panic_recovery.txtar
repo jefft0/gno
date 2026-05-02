@@ -1,7 +1,4 @@
 # Test that a panicking example doesn't prevent subsequent examples from running.
-# Currently FAILS: the second example is never executed because the panic
-# from the first example propagates to the top-level recover in runTestFiles,
-# aborting all remaining examples.
 
 ! gno test -v .
 

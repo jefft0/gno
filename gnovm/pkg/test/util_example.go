@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func (opts *TestOptions) processExampleResult(name, stdout, expected string, timeSpent time.Duration, unordered, finished bool, recovered any) (passed bool) {
+func (opts *TestOptions) processExampleResult(name, stdout, expected string, timeSpent time.Duration, unordered bool) (passed bool) {
 	passed = true
 	dstr := fmtDuration(timeSpent)
 	var fail string
@@ -23,22 +23,22 @@ func (opts *TestOptions) processExampleResult(name, stdout, expected string, tim
 	if unordered {
 		gotLines := slices.Sorted(strings.SplitSeq(got, "\n"))
 		wantLines := slices.Sorted(strings.SplitSeq(want, "\n"))
-		if !slices.Equal(gotLines, wantLines) && recovered == nil {
+		if !slices.Equal(gotLines, wantLines) {
 			fail = fmt.Sprintf("got:\n%s\nwant (unordered):\n%s\n", stdout, expected)
 		}
 	} else {
-		if got != want && recovered == nil {
+		if got != want {
 			fail = fmt.Sprintf("got:\n%s\nwant:\n%s\n", got, want)
 		}
 	}
-	if fail != "" || !finished || recovered != nil {
+	if fail != "" {
 		fmt.Fprintf(opts.Error, "--- FAIL: %s (%s)\n%s", name, dstr, fail)
 		passed = false
 	} else if opts.Verbose {
 		fmt.Fprintf(opts.Error, "--- PASS: %s (%s)\n", name, dstr)
 	}
 
-	// XXX: We process panic recovery elsewhere
+	// XXX: This is from the original golang code. We process panic recovery elsewhere
 	// if recovered != nil {
 	// 	   // Propagate the previously recovered result, by panicking.
 	// 	   panic(recovered)

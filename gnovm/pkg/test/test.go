@@ -607,7 +607,7 @@ func (opts *TestOptions) runTestFiles(
 			expected := fd.Attributes.GetAttribute(gno.ATTR_EXAMPLE_OUTPUT).(string)
 			unordered := fd.Attributes.HasAttribute(gno.ATTR_OUTPUT_UNORDERED) && fd.Attributes.GetAttribute(gno.ATTR_OUTPUT_UNORDERED).(bool)
 
-			ok = opts.processExampleResult(fname, stdout, expected, timeSpent, unordered, true, nil)
+			ok = opts.processExampleResult(fname, stdout, expected, timeSpent, unordered)
 		}
 		if !ok {
 			err := fmt.Errorf("failed: %q", fname)
